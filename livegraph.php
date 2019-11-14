@@ -15,7 +15,8 @@ $table['cols'] = array(
  )
 );
 
-// read csv file 
+// read csv file
+//$csvFile = file('http://hmrc.jp.net/CPUA2004B/HA197Q0001/data/2019/1114/2019114.csv');
 $csvFile = file('data.csv');
 // keep csv data in an array
 $data = [];
@@ -58,21 +59,25 @@ function print_a($array){
 
 <html>
  <head>
-  <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> 
+  <!-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   -->
+  <!-- load libraries -->
   <script type="text/javascript" src="loader.js"></script>
   <script type="text/javascript" src="jquery.min.js"></script>
   <script type="text/javascript">
-  // loading Google Visualization API with the corechart package
+  // loading latest official release of Google Visualization API with the corechart package
    google.charts.load('current', {'packages':['corechart']});
+   // Set a callback to run when the Google Visualization API is loaded.
    google.charts.setOnLoadCallback(drawChart);
 
-   // get json data
-   function drawChart()
+  // Callback that creates and populates a data table from the json data,
+  // instantiates the line chart, passes in the data and draw it.
+  function drawChart()
    {
+    // Create the data table
     var data = new google.visualization.DataTable(<?php echo $jsonTable; ?>);
-    // set axis title
+    // Set chart options
     var options = {
       hAxis: {
           title: 'Time'
@@ -80,24 +85,25 @@ function print_a($array){
         vAxis: {
           title: 'Temperature'
         },
-     
+
      chartArea:{width:'70%', height:'75%'}
     };
     // json = JSON.parse(data);
     // window.alert(JSON.stringify(json));
 
-    // visualize a line graph
+    // Instantiate and draw our line chart, passing in some options.
     var chart = new google.visualization.LineChart(document.getElementById('line_chart'));
     chart.draw(data, options);
 
    }
   </script>
 
+  <!-- set interval for live graph -->
   <script type="text/javascript" src="jQuery.js"></script>
         <script type="text/javascript">
 
                 $(document).ready(function(){
-                    // First load the chart once 
+                    // First load the chart once
                     drawChart();
                     // Set interval to call the drawChart again
                     setInterval(drawChart, 5000);
@@ -112,6 +118,7 @@ function print_a($array){
   </style>
  </head>
  <body>
+  <!--Div will hold the line chart-->
   <div class="page-wrapper">
    <br />
    <h2 align="center">Display CPU Temperature</h2>
